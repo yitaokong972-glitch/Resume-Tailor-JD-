@@ -24,7 +24,7 @@ from docx.shared import Cm, Pt, RGBColor
 ROOT = Path(__file__).resolve().parent
 STATIC = ROOT / "static"
 GENERATED = ROOT / "generated"
-OUTPUTS = ROOT.parents[1] / "outputs"
+OUTPUTS = ROOT / "outputs"
 UPLOADS = ROOT / "uploads"
 # 面向大众版：素材库只扫描项目内的 materials/ 目录，不再扫描开发者个人桌面，
 # 避免把私人资料（简历、实习文件等）注入他人简历。如需内置通用素材，放到 server.py 同级的 materials/ 即可。
