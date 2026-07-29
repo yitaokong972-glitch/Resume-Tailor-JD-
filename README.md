@@ -7,11 +7,15 @@
 
 ---
 
-## 🌐 在线使用（永久稳定地址）
+## 🌐 在线使用
 
-- **在线版（GitHub Pages，永久固定公网地址，7×24 可用）**：https://yitaokong972-glitch.github.io/Resume-Tailor-JD-/
-  > 纯前端部署：密钥只存在你自己的浏览器 localStorage，网页直接调用你配置的模型服务（已验证 DeepSeek 支持浏览器跨域），**不经过任何中转服务器**。打开即用，不依赖开发者电脑，稳定不掉线。
-  > 源码位于仓库 `site/` 目录；如需自托管带后端的版本，见下方「部署到云平台」。
+本仓库提供两种方式，按你的场景选：
+
+- **方式 A · 分享版（推荐，别人免 Key 直接用）**：把后端部署到云平台（Railway / Render），你的 DeepSeek Key 装在服务端环境变量，**任何人打开链接即可直接用 DeepSeek 改写，无需填 Key**。这是"发给别人也能用"的版本。部署步骤见下方「部署到云平台」。
+- **方式 B · 自填 Key 版（纯前端，已上线）**：https://yitaokong972-glitch.github.io/Resume-Tailor-JD-/
+  > 密钥只存在你自己的浏览器 localStorage，适合只想自己用、不想把 Key 暴露给服务端的情况。源码在仓库 `site/` 目录。
+
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template?url=https://github.com/yitaokong972-glitch/Resume-Tailor-JD-)
 
 ---
 
@@ -135,14 +139,19 @@ resume-tailor/
 
 ## 🌐 部署到云平台（获取稳定公网 URL）
 
-本项目是标准 Python 后端，已内置 `Procfile` 与 `$PORT` 支持，可一键部署到任意支持 `Procfile` 的 PaaS，获得 7×24 固定公网地址、且稳定连接模型 API。
+本项目是标准 Python 后端（持有你的模型 Key），已内置 `Procfile` 与 `$PORT` 支持，可部署到任意支持 `Procfile` 的 PaaS，获得 7×24 固定公网地址；**任何人打开链接即可直接用 DeepSeek，无需自己填 Key**。
+
+> **⚠️ 关键前置（解决 "Deploy from GitHub repo 找不到本仓库"）**：Railway / Render 默认看不到你的私有仓库，因为 **GitHub App 还没被授权访问它**。必须先在本机浏览器做一步授权：
+> 进入 **GitHub → 右上角头像 → Settings → Integrations → Applications**（或 *Authorized OAuth Apps*）→ 找到 **Railway**（Render 同理）→ **Repository access** → 选择 **All repositories**（或仅勾选 `Resume-Tailor-JD-`）→ **Save**。授权后回到平台刷新，仓库就会出现。
+> 此外请确认 Railway / Render 登录的 GitHub 账号就是 `yitaokong972-glitch` 本人。
 
 ### Railway（推荐，有免费额度）
 
-1. 注册 https://railway.app ，用 GitHub 登录；
-2. **New Project → Deploy from GitHub repo** → 选中本仓库；
-3. **Variables** 添加：`LLM_API_KEY=你的key`、`LLM_API_BASE=https://api.deepseek.com`、`LLM_MODEL=deepseek-chat`；
-4. 部署完成后 Railway 自动分配 `https://xxx.up.railway.app` 固定地址，把上面的「在线演示」链接替换成它即可。
+1. 完成上面的 GitHub App 授权；
+2. 注册 https://railway.app ，用 GitHub 登录；
+3. **New Project → Deploy from GitHub repo** → 选中本仓库（授权后应可见）；
+4. **Variables** 添加：`LLM_API_KEY=你的key`、`LLM_API_BASE=https://api.deepseek.com`、`LLM_MODEL=deepseek-chat`；
+5. 部署完成后 Railway 自动分配 `https://xxx.up.railway.app` 固定地址，把上面的「方式 A」地址替换成它即可。
 
 ### Render（有免费额度）
 
