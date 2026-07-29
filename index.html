@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>JD 智能简历定制台 · 在线版</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <div>
+          <h1>JD 智能简历定制台</h1>
+          <p>粘贴 JD + 你的简历，由大模型按岗位改写，导出中 / 英文 Word</p>
+        </div>
+        <button id="settingsBtn" class="secondary">⚙ 模型设置</button>
+      </header>
+
+      <!-- 模型设置抽屉 -->
+      <section id="settingsPanel" class="settings-panel" hidden>
+        <div class="settings-grid">
+          <label>
+            <span>API Key（仅存本机浏览器）</span>
+            <input id="apiKey" type="password" placeholder="sk-xxxxxxxx" autocomplete="off" />
+          </label>
+          <label>
+            <span>接口地址（OpenAI 兼容）</span>
+            <input id="apiBase" type="text" placeholder="https://api.deepseek.com" />
+          </label>
+          <label>
+            <span>模型名</span>
+            <input id="apiModel" type="text" placeholder="deepseek-chat" />
+          </label>
+        </div>
+        <p class="settings-hint">
+          密钥只保存在你自己的浏览器 localStorage，不会上传到任何服务器；页面直接调用你填写的模型服务。
+          <span id="connStatus" class="conn-status">未连接</span>
+        </p>
+      </section>
+
+      <section class="workspace">
+        <!-- 左侧输入 -->
+        <section class="panel input-panel">
+          <div class="panel-head">
+            <h2>岗位 JD</h2>
+            <span id="jdCount">0 字</span>
+          </div>
+          <textarea id="jdInput" spellcheck="false" placeholder="粘贴目标岗位描述（Job Description）"></textarea>
+
+          <div class="requirement-tools">
+            <div class="panel-head compact">
+              <h2>修改要求</h2>
+              <span>例如：突出数据合规 / 金融投融资 / 英文写作</span>
+            </div>
+            <textarea id="customInput" spellcheck="false" placeholder="例如：这个岗位偏数据合规，请增加 AI 出海、技术出口管制经历；实习经历按 STAR 写，删掉无关竞赛。"></textarea>
+          </div>
+
+          <div class="resume-tools">
+            <div class="panel-head compact">
+              <h2>你的简历</h2>
+              <label class="file-label">
+                <input id="resumeFile" type="file" accept=".docx,.txt" />
+                上传 .docx / .txt
+              </label>
+            </div>
+            <textarea id="resumeInput" spellcheck="false" placeholder="粘贴你的简历文本；或上传 .docx / .txt 文件"></textarea>
+          </div>
+
+          <div class="actions-row">
+            <button id="analyzeBtn" class="primary">① 生成修改意见</button>
+            <button id="downloadBtn" class="secondary">② 下载中文简历</button>
+            <button id="downloadEnBtn" class="secondary">③ 下载英文简历</button>
+          </div>
+          <p class="hint" id="actionHint">先点「① 生成修改意见」得到预览，再下载 Word。</p>
+        </section>
+
+        <!-- 中：修改意见 -->
+        <section class="panel advice-panel">
+          <div class="panel-head">
+            <h2>改写说明 / 修改意见</h2>
+            <span id="sectorBadge">等待生成</span>
+          </div>
+          <div class="advice-list" id="adviceList">
+            <p class="empty-tip">生成后，这里会显示模型如何根据你的 JD 与要求改写简历。</p>
+          </div>
+        </section>
+
+        <!-- 右：简历预览 -->
+        <section class="panel output-panel">
+          <div class="panel-head">
+            <h2>简历预览</h2>
+            <div class="download-group">
+              <select id="previewLang" class="preview-select">
+                <option value="zh">中文</option>
+                <option value="en">英文</option>
+              </select>
+            </div>
+          </div>
+          <div class="resume-page" id="resumePreview">
+            <p class="empty-tip">预览区将在生成后显示。</p>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <div class="toast" id="toast" hidden></div>
+
+    <!-- 本地内置依赖，避免国内 CDN 被墙 -->
+    <script src="vendor/docx.umd.js"></script>
+    <script src="vendor/mammoth.browser.min.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
