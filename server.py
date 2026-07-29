@@ -2401,7 +2401,8 @@ def main():
                     RUNTIME_DEEPSEEK_MODEL = "deepseek-chat"
     except Exception:
         pass
-    port = 8765
+    # 支持云平台注入的 $PORT（Railway / Render / Heroku 等），本地默认 8765
+    port = int(os.environ.get("PORT", 8765))
     server = ThreadingHTTPServer(("0.0.0.0", port), Handler)
     print(f"监听地址: http://0.0.0.0:{port}（本机访问 http://127.0.0.1:{port}；局域网设备用本机IP访问，如 http://192.168.x.x:{port}）", flush=True)
     server.serve_forever()

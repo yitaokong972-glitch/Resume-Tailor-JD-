@@ -7,6 +7,13 @@
 
 ---
 
+## 🌐 在线演示
+
+- **临时演示（由开发者本机托管）**：https://sessions-assessment-ten-develop.trycloudflare.com
+  > ⚠️ 该链接运行在开发者电脑上，电脑关机 / 休眠即失效，**不保证 7×24 稳定**。如需稳定公网地址，请按下方「部署到云平台」自行部署，约 2 分钟拿到永久固定 URL 后即可替换本链接。
+
+---
+
 ## ✨ 功能特性
 
 - **按 JD 智能改写**：根据岗位描述与你的补充要求，重写简历 bullet、突出匹配经历、补全缺失能力。
@@ -122,6 +129,29 @@ resume-tailor/
 ├── LICENSE
 └── README.md
 ```
+
+---
+
+## 🌐 部署到云平台（获取稳定公网 URL）
+
+本项目是标准 Python 后端，已内置 `Procfile` 与 `$PORT` 支持，可一键部署到任意支持 `Procfile` 的 PaaS，获得 7×24 固定公网地址、且稳定连接模型 API。
+
+### Railway（推荐，有免费额度）
+
+1. 注册 https://railway.app ，用 GitHub 登录；
+2. **New Project → Deploy from GitHub repo** → 选中本仓库；
+3. **Variables** 添加：`LLM_API_KEY=你的key`、`LLM_API_BASE=https://api.deepseek.com`、`LLM_MODEL=deepseek-chat`；
+4. 部署完成后 Railway 自动分配 `https://xxx.up.railway.app` 固定地址，把上面的「在线演示」链接替换成它即可。
+
+### Render（有免费额度）
+
+1. 注册 https://render.com ，用 GitHub 登录；
+2. **New → Web Service** → 关联本仓库；
+3. **Build Command**：`pip install -r requirements.txt`；**Start Command**：`python server.py`；
+4. **Environment** 添加上述三个变量；
+5. 部署完成后获得 `https://xxx.onrender.com` 固定地址。
+
+> 部署后服务默认读取 `LLM_API_KEY` 环境变量连接模型；模型调用从云平台服务器直接访问 `LLM_API_BASE`，不经过任何本机代理，连接稳定。
 
 ---
 
