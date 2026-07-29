@@ -10,6 +10,7 @@ from pathlib import Path
 from urllib.error import HTTPError, URLError
 from urllib.parse import parse_qs, quote, unquote, urlencode, urlparse
 from urllib.request import Request, urlopen
+import urllib.request
 from zipfile import ZIP_DEFLATED, ZipFile
 
 from lxml import etree
@@ -967,6 +968,18 @@ def resume_for_prompt(resume):
     return "\n".join(lines)
 
 
+def llm_urlopen(req, timeout):
+    """直连 LLM 接口，绕过本地 HTTP(S) 代理。
+
+    部分开发机/校园网会在环境变量里设置 HTTPS_PROXY 指向本地代理
+    (如 127.0.0.1:61237)，该代理不稳定或仅用于特定流量时会导致
+    'Connection refused'。DeepSeek/OpenAI 兼容接口可直连，故此处强制
+    不使用任何代理。
+    """
+    opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+    return opener.open(req, timeout=timeout)
+
+
 def deepseek_response_text(payload):
     api_key = get_deepseek_key()
     if not api_key:
@@ -991,7 +1004,7 @@ def deepseek_response_text(payload):
             method="POST",
         )
         try:
-            with urlopen(req, timeout=60) as response:
+            with llm_urlopen(req, timeout=60) as response:
                 data = json.loads(response.read().decode("utf-8"))
             choices = data.get("choices") or []
             if choices:
@@ -1040,7 +1053,7 @@ def test_deepseek_connection():
         method="POST",
     )
     try:
-        with urlopen(req, timeout=30) as response:
+        with llm_urlopen(req, timeout=30) as response:
             data = json.loads(response.read().decode("utf-8"))
         if data.get("choices"):
             return {"ok": True, "model": "AI", "provider": "AI"}
