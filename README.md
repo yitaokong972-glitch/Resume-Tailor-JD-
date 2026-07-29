@@ -24,7 +24,7 @@
 | 层 | 技术 |
 | --- | --- |
 | 后端 | Python 3.9+ · 标准库 `http.server`（零额外 Web 框架） |
-| 模型接入 | OpenAI 兼容 Chat Completions 接口（默认 DeepSeek，可替换） |
+| 模型接入 | OpenAI 兼容 Chat Completions 接口（可接入 DeepSeek / OpenAI / 通义千问 / 智谱 GLM / 本地 Ollama 等任意兼容服务） |
 | 文档生成 | `python-docx` · `lxml` |
 | 解析 | `pdfplumber`（PDF）· `python-docx`（Word） |
 | 前端 | 原生 HTML / CSS / JavaScript（无构建步骤） |
