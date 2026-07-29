@@ -127,4 +127,4 @@ resume-tailor/
 
 ## 📄 许可证
 
-[MIT](./LICENSE) — 可自由用于学习、二次开发与分发。使用前请将 `LICENSE` 中的 `<your-name>` 替换为你的名字 / GitHub 用户名。
+[MIT](./LICENSE) — 可自由用于学习、二次开发与分发。
