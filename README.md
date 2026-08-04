@@ -1,171 +1,78 @@
-# Resume Tailor · JD 智能简历定制台
+# JD 智能简历定制台
 
-一个开箱即用的本地 Web 应用：上传你的简历 + 目标岗位 JD，由大语言模型按 JD 改写、润色简历正文，
-并一键导出排版统一的中 / 英文 Word 文档。无需注册、无需联网账号，模型密钥只在服务端配置一次。
+把你的简历，按目标岗位招聘要求（JD）智能改写、润色，一键导出排版统一的中 / 英文 Word 简历。全程在浏览器里完成，不用装软件、不用注册账号。
 
-> 面向求职者、实习生的简历优化工具：把"我有哪些经历"和"岗位要什么"对齐，输出可直接投递的定制简历。
-
----
-
-## 🌐 在线使用
-
-- **在线版（纯前端 · 永久稳定，已上线）**：https://yitaokong972-glitch.github.io/Resume-Tailor-JD-/
-  > 完全运行在浏览器里，**没有后端、没有服务器**，因此不会因为服务端崩溃 / 休眠而失效，是最稳的方案。源码在仓库 `site/` 目录。
-  > **使用方式**：打开链接 → 右上角「⚙ 模型设置」粘贴你自己的 DeepSeek API Key（仅存你本机浏览器 localStorage）→ 贴 JD + 简历 → 生成 / 下载。
-  > **说明**：因为无后端，密钥由使用者各自在浏览器填写（各自用各自的额度）。若你想"发给别人、别人免填 Key 直接用"，那是下方「可选：后端自托管」的场景。
-
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template?url=https://github.com/yitaokong972-glitch/Resume-Tailor-JD-)
+> 适合正在求职、找实习、申请学校的同学：把"我有哪些经历"和"岗位要什么"对齐，直接产出可投递的定制简历。
 
 ---
 
-## ✨ 功能特性
+## 🚀 怎么用（30 秒上手）
 
-- **按 JD 智能改写**：根据岗位描述与你的补充要求，重写简历 bullet、突出匹配经历、补全缺失能力。
-- **中 / 英双语导出**：内置专业中译英规则，导出排版统一、可直接投递的 `.docx`。
-- **多方向模板**：律所 / 法务、金融 / 投融资、国央企 / 合规等方向有不同的 bullet 表述策略。
-- **联网检索增强**（可选）：结合公开检索补充行业 / 岗位语境，再交给模型改写。
-- **纯本地兜底**：未配置模型密钥时，使用内置规则生成，保证服务始终可用。
-- **零服务器（前端版）**：纯前端运行，无需部署后端；API Key 仅存你本机浏览器 localStorage，不离开本机。
-- **隐私优先**：在前端版中，简历 / JD 仅在你的浏览器内处理，只在改写时发送给你所配置的模型服务；后端自托管版同理仅在服务端处理。
+1. **打开网页**：👉 https://yitaokong972-glitch.github.io/Resume-Tailor-JD-/
+2. **填你自己的模型 Key**：点右上角「⚙ 模型设置」，选一家服务商（或自己填接口地址），粘贴你自己的 API Key。
+3. **贴 JD + 简历**：左边粘贴目标岗位描述，再粘贴或上传你的简历（支持 .docx / .txt）。
+4. **生成 / 下载**：点「① 生成修改意见」看 AI 怎么改；再点「② 下载中文简历」「③ 下载英文简历」导出 Word。
 
----
-
-## 🧱 技术栈
-
-| 层 | 技术 |
-| --- | --- |
-| 后端 | Python 3.9+ · 标准库 `http.server`（零额外 Web 框架） |
-| 模型接入 | OpenAI 兼容 Chat Completions 接口（可接入 DeepSeek / OpenAI / 通义千问 / 智谱 GLM / 本地 Ollama 等任意兼容服务） |
-| 文档生成 | `python-docx` · `lxml` |
-| 解析 | `pdfplumber`（PDF）· `python-docx`（Word） |
-| 前端 | 原生 HTML / CSS / JavaScript（无构建步骤） |
+就这么简单——没有后端、不需要把简历发给任何人，关掉网页一切都在你电脑上。
 
 ---
 
-## 🚀 快速开始
+## 🔑 支持哪些模型服务
 
-### 1. 克隆与安装依赖
+本工具调用**任意 OpenAI 兼容**的 Chat Completions 接口，不限定某一家。在「模型设置」里点一下即可自动填好接口地址，你只要补上自己的 Key：
 
-```bash
-git clone <your-repo-url> resume-tailor
-cd resume-tailor
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-```
-
-### 2. 配置模型密钥
-
-任选其一（推荐方式一）：
-
-**方式一 · 环境变量**
-
-```bash
-export LLM_API_KEY="sk-xxxxxxxx"
-export LLM_API_BASE="https://api.deepseek.com"   # 可替换为任意 OpenAI 兼容地址
-export LLM_MODEL="deepseek-chat"
-```
-
-**方式二 · 密钥文件**
-
-在项目根目录创建 `.llm_key`，内容仅为你的 API Key 一行：
-
-```bash
-echo "sk-xxxxxxxx" > .llm_key
-```
-
-> 也兼容旧文件名 `.deepseek_key`。无论哪种方式，密钥文件都已被 `.gitignore` 忽略，不会进入仓库。
-
-### 3. 启动
-
-```bash
-python server.py
-```
-
-打开浏览器访问：
-
-- 本机：`http://127.0.0.1:8765/`
-- 同局域网其他设备：用本机局域网 IP，如 `http://192.168.x.x:8765/`
-
-### 4. 使用
-
-1. 在「JD」框粘贴目标岗位描述；
-2. 在「原简历」框粘贴简历文本，或上传简历 / 补充材料（支持 Word / PDF / 文本）；
-3. 点「生成修改意见」查看 AI 改写预览；
-4. 点「生成中文简历 / 英文简历」下载排版好的 Word。
-
----
-
-## ⚙️ 配置项（环境变量）
-
-| 变量 | 说明 | 默认值 |
+| 服务商 | 接口地址 | 常用模型 |
 | --- | --- | --- |
-| `LLM_API_KEY` | 模型服务 API Key | 空（未配置则走本地规则兜底） |
-| `LLM_API_BASE` | OpenAI 兼容接口地址 | `https://api.deepseek.com` |
-| `LLM_MODEL` | 模型名 | `deepseek-chat` |
+| DeepSeek | `https://api.deepseek.com` | `deepseek-chat` |
+| OpenAI | `https://api.openai.com/v1` | `gpt-4o-mini` |
+| 通义千问 | `https://dashscope.aliyuncs.com/compatible-mode/v1` | `qwen-plus` |
+| 智谱 GLM | `https://open.bigmodel.cn/api/paas/v4` | `glm-4-flash` |
+| 本地 Ollama | `http://localhost:11434/v1` | `llama3`（或你本地装的模型） |
 
-兼容旧变量名 `DEEPSEEK_API_KEY` / `DEEPSEEK_MODEL`，便于从旧部署迁移。
-
----
-
-## 🔒 隐私说明
-
-- 用户上传的简历、JD、补充材料**仅在运行本服务的本机处理**，不会上传到任何第三方存储；
-- 仅在"调用模型改写"时，相关内容会按你的配置发送给 `LLM_API_BASE` 指向的模型服务；
-- 未配置密钥时，服务使用内置规则在本地生成，完全不联网；
-- 密钥文件（`.llm_key`）与运行时目录（`uploads/`、`generated/`）均已加入 `.gitignore`，不会进入仓库。
+> 也可以填其他任意兼容服务（Azure OpenAI、Mistral、Groq 等），只要它提供 `/chat/completions` 接口。
+> **Key 需要你自己去对应服务商平台申请**——每家额度、计费、申请方式不同，本工具不涉及。
 
 ---
 
-## 📁 目录结构
+## 🔒 隐私说明（很重要）
 
-```
-resume-tailor/
-├── server.py            # 后端：HTTP 服务 + 模型改写 + Word 生成
-├── static/
-│   ├── index.html       # 页面结构
-│   ├── app.js           # 前端交互逻辑
-│   └── styles.css       # 样式
-├── materials/           # 可选共享素材库（空目录即可）
-├── requirements.txt     # Python 依赖
-├── .env.example         # 配置样例
-├── .gitignore
-├── LICENSE
-└── README.md
-```
+- **密钥只存在你自己的浏览器里**（localStorage），不会上传到任何服务器；
+- **简历和 JD 只在你的浏览器内处理**，只在你点"生成"时发送给你自己配置的模型服务；
+- 本工具**没有后端、没有数据库**，作者看不到你的任何内容；
+- 不想用了，在设置里清掉 Key、或直接清浏览器缓存即可。
 
 ---
 
-## 🌐 可选：后端自托管（让别人免 Key 直接用）
+## ❓ 常见问题
 
-> 上面 GitHub Pages 的纯前端版已是最稳方案。**只有**当你需要"把链接发给别人、别人打开就能直接用 DeepSeek、不用自己填 Key"时，才需要部署下面的后端（你的 Key 装在服务端）。否则不用看这节。
+**Q：一定要 DeepSeek 吗？**
+A：不。DeepSeek 只是默认示例，OpenAI、通义千问、智谱、本地 Ollama 等任何 OpenAI 兼容服务都能用，你也可以填别家。
 
-本项目是标准 Python 后端（持有你的模型 Key），已内置 `Procfile` 与 `$PORT` 支持，可部署到任意支持 `Procfile` 的 PaaS，获得 7×24 固定公网地址；**任何人打开链接即可直接用 DeepSeek，无需自己填 Key**。
+**Q：会乱编我的经历吗？**
+A：不会虚构经历、学校、公司或数据。它基于你提供的原始简历，按 JD 和要求重组、改写表达；原始简历为空时才会生成占位并提示你补充。
 
-> **⚠️ 关键前置（解决 "Deploy from GitHub repo 找不到本仓库"）**：Railway / Render 默认看不到你的私有仓库，因为 **GitHub App 还没被授权访问它**。必须先在本机浏览器做一步授权：
-> 进入 **GitHub → 右上角头像 → Settings → Integrations → Applications**（或 *Authorized OAuth Apps*）→ 找到 **Railway**（Render 同理）→ **Repository access** → 选择 **All repositories**（或仅勾选 `Resume-Tailor-JD-`）→ **Save**。授权后回到平台刷新，仓库就会出现。
-> 此外请确认 Railway / Render 登录的 GitHub 账号就是 `yitaokong972-glitch` 本人。
+**Q：下载的是什么？**
+A：排版好的 `.docx`（Word），中英文分开下载，可直接投递或继续编辑。
 
-### Railway（推荐，有免费额度）
-
-1. 完成上面的 GitHub App 授权；
-2. 注册 https://railway.app ，用 GitHub 登录；
-3. **New Project → Deploy from GitHub repo** → 选中本仓库（授权后应可见）；
-4. **Variables** 添加：`LLM_API_KEY=你的key`、`LLM_API_BASE=https://api.deepseek.com`、`LLM_MODEL=deepseek-chat`；
-5. 部署完成后 Railway 自动分配 `https://xxx.up.railway.app` 固定地址，把上面的「方式 A」地址替换成它即可。
-
-### Render（有免费额度）
-
-1. 注册 https://render.com ，用 GitHub 登录；
-2. **New → Web Service** → 关联本仓库；
-3. **Build Command**：`pip install -r requirements.txt`；**Start Command**：`python server.py`；
-4. **Environment** 添加上述三个变量；
-5. 部署完成后获得 `https://xxx.onrender.com` 固定地址。
-
-> 部署后服务默认读取 `LLM_API_KEY` 环境变量连接模型；模型调用从云平台服务器直接访问 `LLM_API_BASE`，不经过任何本机代理，连接稳定。
+**Q：要花钱吗？**
+A：工具本身免费开源。调用模型按你所用服务商的额度 / 计费走，与你直接调用该服务一致。
 
 ---
 
-## 📄 许可证
+## 💡 小提示
 
-[MIT](./LICENSE) — 可自由用于学习、二次开发与分发。
+- 简历越具体（有数据、有项目名），改写效果越好；
+- "修改要求"里可以写得很细，比如"突出数据合规经历、按 STAR 写法、删掉无关竞赛"，模型会优先满足；
+- 中英文相互独立：先生成中文，再一键出英文。
+
+---
+
+## 🛠 开发者 / 自托管（可选）
+
+如果你是自己部署、想做成"别人打开就能用、不用自己填 Key"的后端版：仓库里还带一套 Python 后端（`server.py` + `static/`），可部署到 Railway / Render 等支持 Procfile 的平台，把 Key 放在服务端。详见仓库 `server.py` 注释与提交历史。
+
+本仓库完全开源（MIT），欢迎 Fork、二次开发。
+
+---
+
+📄 许可证：[MIT](./LICENSE)
