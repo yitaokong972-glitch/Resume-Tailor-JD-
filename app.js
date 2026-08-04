@@ -1,5 +1,5 @@
 /* JD 智能简历定制台 · 纯前端版
- * - 直接在浏览器调用 OpenAI 兼容接口（已验证 DeepSeek 支持 CORS）
+ * - 直接在浏览器调用任意 OpenAI 兼容接口（已验证常见服务支持浏览器跨域 CORS）
  * - 密钥仅存 localStorage，不离开本机
  * - 用 docx 库在浏览器生成中 / 英文 Word 下载
  */
@@ -548,6 +548,15 @@
       if (!el.settingsPanel.hidden) testConnection();
     });
     [el.apiKey, el.apiBase, el.apiModel].forEach((i) => i.addEventListener("change", () => { saveCfg(); testConnection(); }));
+    document.querySelectorAll(".preset-btn").forEach((b) => {
+      b.addEventListener("click", () => {
+        el.apiBase.value = b.dataset.base;
+        el.apiModel.value = b.dataset.model;
+        saveCfg();
+        testConnection();
+        toast("已填入「" + b.textContent + "」接口与模型，请粘贴对应 Key");
+      });
+    });
     el.jd.addEventListener("input", () => (el.jdCount.textContent = el.jd.value.length + " 字"));
     el.analyzeBtn.addEventListener("click", generateZh);
     el.downloadBtn.addEventListener("click", () => downloadDocx("zh"));
